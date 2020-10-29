@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/pixi.min.js"></script>
+    <script>
+        let app;
+        let player;
+        let enemy;
+        let speed = 4;
+
+        const rectsIntersect = (a, b) => {
+            let aBox = a.getBounds();
+            let bBox = b.getBounds();
+
+            return aBox.x + aBox.width > bBox.x &&
+                aBox.x < bBox.x + bBox.width &&
+                aBox.y + aBox.height > bBox.y &&
+                aBox.y < bBox.y + bBox.height;
+        }
+
+        const gameLoop = delta => {
+            player.x += speed;
+            enemy.x -= speed;
+
+            if (rectsIntersect(player, enemy)) {
+                speed = 0;
+            }
+        }
+
+        window.onload = () => {
+            app = new PIXI.Application(
+                {
+                    width: 800,
+                    height: 600,
+                    backgroundColor: 0xAAAAAA
+                }
+            );
+
+            document.body.appendChild(app.view);
+            player = new PIXI.Sprite.from('images/player.png');
+            player.anchor.set(0.5);
+            player.x = 35;
+            player.y = app.view.height / 2;
+
+            document.body.appendChild(app.view);
+            enemy = new PIXI.Sprite.from('images/player.png');
+            enemy.anchor.set(0.5);
+            enemy.x = app.view.width - 35;
+            enemy.y = app.view.height / 2;
+
+            app.stage.addChild(player);
+            app.stage.addChild(enemy);
+
+            app.ticker.add(gameLoop);
+        }
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
