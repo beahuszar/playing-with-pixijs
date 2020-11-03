@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/pixi.min.js"></script>
+    <script>
+        let app;
+        let pointerIsDown = false;
+        let pointerIsOver = false;
+        
+        const NORMAL = 0xFFFFFF;
+        const OVER = 0x00FF00;
+        const DOWN = 0xFF0000;
+
+        const doPointerUp = (e) => {
+            if (pointerIsOver) {
+                e.currentTarget._tint = OVER;
+            } else {
+                e.currentTarget._tint = NORMAL;
+            }
+            pointerIsDown = false;
+        };
+        const doPointerDown = (e) => {
+            e.currentTarget._tint = DOWN;
+            pointerIsDown = true;
+        };
+        const doPointerOver = (e) => {
+            if (!pointerIsOver) {
+                e.currentTarget._tint = OVER;
+                pointerIsOver = true;   
+            }
+        };
+        const doPointerOut = (e) => {
+            if (!pointerIsDown) {
+                e.currentTarget._tint = NORMAL;
+                pointerIsOver = false;
+            }
+        };
+
+        const doPointerUpOutside = e => {
+            e.currentTarget._tint = NORMAL;
+            pointerIsOver = false;
+            pointerIsDown = false;
+        }
+
+        const gameLoop = (delta) => {
+
+        }
+
+        window.onload = () => {
+            app = new PIXI.Application(
+                {
+                    width: 800,
+                    height: 600,
+                    backgroundColor: 0xAAAAAA
+                }
+            );
+
+            document.querySelector('#gameDiv').appendChild(app.view);
+            let rect = new PIXI.Graphics();
+            rect.beginFill(NORMAL);
+            rect.drawRect((app.view.width / 2) - 100, (app.view.height / 2) - 100, 200, 200);
+            rect.endFill();
+            rect.interactive = true;
+            rect.buttonMode = true;
+            rect.on('pointerup', doPointerUp);
+            rect.on('pointerdown', doPointerDown);
+            rect.on('pointerover', doPointerOver);
+            rect.on('pointerout', doPointerOut);
+            rect.on('pointerupoutside', doPointerUpOutside);
+
+            app.stage.addChild(rect);
+            app.ticker.add(gameLoop);
+        }
+    </script>
+</head>
+<body>
+    <div id="gameDiv"></div>    
+</body>
+</html>
