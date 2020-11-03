@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="js/pixi.min.js"></script>
+  <script>
+    let app;
+    let player;
+
+    const movePlayer = e => {
+      let pos = e.data.global;
+
+      player.x = pos.x;
+      player.y = pos.y;
+    }
+
+    const initMovements = () => {
+      app.stage.interactive = true;
+      app.stage.on('pointermove', movePlayer);
+    }
+
+    window.onload = () => {
+      app = new PIXI.Application(
+        {
+          width: 800,
+          height: 600,
+          backgroundColor: 0xAAAAAA
+        }
+      );
+      document.body.appendChild(app.view);
+
+      player = PIXI.Sprite.from('images/Enemy2.1.png');
+      player.x = app.view.width / 2;;
+      player.y = app.view.height / 2;
+      player.anchor.set(0.5);
+      app.stage.addChild(player);
+
+      initMovements();
+    }
+  </script>
+</head>
+<body>
+
+</body>
+</html>
